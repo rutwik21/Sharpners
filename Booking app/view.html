@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Appointment</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+
+</head>
+<body>
+      <form class="container align-self-center w-50 bg-body-secondary mt-5 rounded p-3">
+        <h1 class="card-title">Booking App</h1>
+        <div class="form-group mt-3">
+          <label for="name">Name</label>
+          <input type="text" class="form-control " id="name" placeholder="Enter name">
+        </div>
+        <div class="form-group">
+          <label for="phone">Phone number</label>
+          <input type="number" class="form-control" id="phone" placeholder="Phone number">
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" class="form-control" id="email" placeholder="Email">
+        </div><br>
+        <button type="submit" class="btn btn-primary" id="submit">Submit</button>
+      </form>
+      <h4 id="msg" class="text-black-50 text-center"></h4>
+      <div id="res"></div>
+      <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"> </script>
+      <script>
+          const form = document.querySelector('form');
+          const name = document.getElementById('name');
+          const phone = document.getElementById('phone');
+          const email = document.getElementById('email');
+          const userlist = document.getElementById('res');
+          const msg = document.querySelector("#msg");
+          const submitbtn = document.getElementById('submit');
+
+
+          submitbtn.addEventListener('click',async ()=>{
+            event.preventDefault();
+            const obj = {'name':name.value,'phone':phone.value,'email':email.value};
+            try{
+
+              await axios.post("http://localhost:3000/saveUser",obj).then(res=>{
+
+                const user=document.createElement('li');
+                const edit=document.createElement('button');
+                const del=document.createElement('button');
+                const div=document.createElement('div');
+
+                edit.className='btn btn-outline-secondary btn-sm';
+                del.className='btn btn-outline-danger btn-sm';
+                div.className="container align-self-center w-50 bg-body-secondary mt-1 rounded p-3";
+                
+                edit.textContent='Edit';
+                del.textContent='Delete';
+                user.textContent= `${res.data.name} - ${res.data.phone} - ${res.data.email}`;
+
+                edit.addEventListener('click',()=>{
+                  userlist.removeChild(div);
+
+
+                  name.value = `${res.data.name}`;
+                  phone.value = `${res.data.phone}`;
+                  email.value = `${res.data.email}`;
+                  const updateBtn=document.createElement('button');
+                  updateBtn.textContent='Update';
+                  updateBtn.className='btn btn-outline-success';
+                  
+                  updateBtn.addEventListener('click', async()=>{
+                    event.preventDefault();
+                      const updated = {'name':name.value,'phone':phone.value,'email':email.value};
+                      try{
+                        await axios.patch(`http://localhost:3000/updateUser/${res.data.id}`,updated);
+                        msg.textContent='Upadated';
+                        name.value = '';
+                        phone.value = '';
+                        email.value = '';
+                        form.removeChild(updateBtn);
+                        form.appendChild(submitbtn);
+                        display();
+                      }
+                      catch(err){console.log(err)};
+                  });
+
+                  form.removeChild(submitbtn);
+                  form.appendChild(updateBtn);
+
+                  
+
+                });
+                
+                del.addEventListener('click',async ()=>{
+                  try{
+                      await axios.delete(`http://localhost:3000/deleteUser/${res.data.id}`);
+                      msg.textContent='Deleted';
+                      display();
+                  }
+                  catch(err){console.log(err)}
+                });
+
+                div.appendChild(user);
+                div.appendChild(edit);
+                div.appendChild(del);
+                userlist.appendChild(div);
+                
+                msg.textContent='success';
+
+              })
+              
+
+              name.value = '';
+              phone.value = '';
+              email.value = '';
+            
+            }
+            catch(err){
+              console.log(err);
+            }
+          });
+
+          async function display(){
+            
+            userlist.innerHTML = '';
+            try{
+              let res = await axios.get("http://localhost:3000/getUser");
+              
+              res.data.forEach(ele => {
+                const user=document.createElement('li');
+                const edit=document.createElement('button');
+                const del=document.createElement('button');
+                const div=document.createElement('div');
+
+                edit.className='btn btn-outline-secondary btn-sm';
+                del.className='btn btn-outline-danger btn-sm';
+                div.className="container align-self-center w-50 bg-body-secondary mt-1 rounded p-3";
+
+                edit.textContent='Edit';
+                del.textContent='Delete';
+                user.textContent= `${ele.name} - ${ele.phone} - ${ele.email}`;
+
+                edit.addEventListener('click',()=>{
+                  
+                  userlist.removeChild(div);
+                  name.value = `${ele.name}`;
+                  phone.value = `${ele.phone}`;
+                  email.value = `${ele.email}`;
+                  const updateBtn=document.createElement('button');
+                  updateBtn.textContent='Update';
+                  updateBtn.className='btn btn-outline-success';
+                  
+                  updateBtn.addEventListener('click', async()=>{
+                    event.preventDefault();
+                    const updated = {'name':name.value,'phone':phone.value,'email':email.value};
+                    try{
+                      await axios.patch(`http://localhost:3000/updateUser/${ele.id}`,updated);
+                      msg.textContent='Upadated';
+                      name.value = '';
+                      phone.value = '';
+                      email.value = '';
+                      form.removeChild(updateBtn);
+                      form.appendChild(submitbtn);
+                      display();
+                    }
+                    catch(err){console.log(err)};
+                  });
+
+                  form.removeChild(submitbtn);
+                  form.appendChild(updateBtn);
+
+                });
+                
+                del.addEventListener('click',async ()=>{
+                  try{
+                      await axios.delete(`http://localhost:3000/deleteUser/${ele.id}`);
+                      msg.textContent='Deleted';
+                      display();
+                  }
+                  catch(err){console.log(err)}
+                });
+
+                div.appendChild(user);
+                div.appendChild(edit);
+                div.appendChild(del);
+                userlist.appendChild(div);
+                
+              });
+            }
+            catch(err){console.log(err)}
+            };
+
+            display();
+      </script>
+</body>
+</html>
