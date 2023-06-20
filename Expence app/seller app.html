@@ -22,16 +22,16 @@
                                     <label for="name" class="form-label">Item name:</label><br>
                                 </div>
                                 <div class="form-floating">
-                                    <input type="text" id="description" required class="form-control" placeholder="m">
-                                    <label for="description" class="form-label">Description:</label><br>
+                                    <input type="hidden" id="description" required class="form-control" placeholder="m" value="N/A">
+                                    
                                 </div>
                                 <div class="form-floating">
                                     <input type="number" id="price" required class="form-control" placeholder="m"><br>
                                     <label for="price" class="form-label">Price:</label>
                                 </div>
                                 <div class="form-floating">
-                                    <input type="number" id="quantity" required class="form-control" placeholder="m"><br>
-                                    <label for="quantity" class="form-label">Quantity:</label>
+                                    <input type="hidden" id="quantity" required class="form-control" placeholder="m" value="1"><br>
+                                    
                                 </div>
                                 <button class="btn btn-success" type="submit" id="button">Add Item</button>
                             </form>
@@ -40,9 +40,9 @@
                     </div>
 
                     <div class="col bg-primary bg-opacity-10 p-4 mt-5 rounded">
-                        <h1 class="text-dark text-center">Item List</h1>
+                        
+                        <h3>Total Value : <h4 id="totalValue"></h4></h3>
                         <h4 id="msg" class="text-black-50 text-center"></h4>
-
                         <ul id="item-list"></ul>
                     
                     </div>
@@ -59,20 +59,28 @@
                 const btn = document.querySelector("#button");
                 const item_list = document.querySelector("#item-list");
                 const msg = document.querySelector("#msg");
+                const tv = document.querySelector("#totalValue");
+
+                
+                
+
 
                 btn.addEventListener('click',async ()=>{
+                    event.preventDefault();
                     const obj = {'name':name.value,'description':dis.value,'price':price.value,'quantity':qty.value};
                     try{
-                        await axios.post("http://localhost:3000/saveProduct",obj);
-                        setTimeout(display(),8);
+                        const res = await axios.post("http://localhost:3000/saveProduct",obj);
+                        msg.textContent='Success';
+                        display();
                     }
-                    catch(err){console.log(err);}
+                    catch(err){console.log(err)};
 
                 });
 
-                async function display(){
+                async function display(a){
 
                     item_list.innerHTML="";
+                    let totalValue =0;
 
                     try{
                         let res = await axios.get("http://localhost:3000/getProducts");
@@ -81,75 +89,37 @@
 
 
                             const expence=document.createElement('li');
-                            const buy1=document.createElement('button');
-                            const buy2=document.createElement('button');
-                            const buy3=document.createElement('button');
                             const del=document.createElement('button');
                             const div=document.createElement('div');
 
-                            buy1.className='btn btn-outline-secondary btn-sm ';
-                            buy2.className='btn btn-outline-secondary btn-sm';
-                            buy3.className='btn btn-outline-secondary btn-sm';
                             del.className='btn btn-outline-danger btn-sm';
                             div.className='align-center'
 
-                            buy1.textContent='Buy1';
-                            buy2.textContent='Buy2';
-                            buy3.textContent='Buy3';
                             del.textContent='Delete';
-                            expence.textContent=`${item.name} - ${item.description} - ${item.price} - ${item.quantity}`;
-
-                            buy1.addEventListener('click',async ()=>{
-                                if(item.quantity>0){
-                                    expence.textContent=`${item.name} - ${item.discription} - ${item.price} - ${item.quantity-1}`
-                                    item.quantity=item.quantity-1;
-                                    msg.textContent='success';
-                                }
-                                else{
-                                    msg.textContent='Not Avilable!';
-                                }
-                            });
-
-                            buy2.addEventListener('click',async ()=>{
-                                if(item.quantity>1){
-                                    expence.textContent=`${item.name} - ${item.discription} - ${item.price} - ${item.quantity-2}`
-                                    item.quantity=item.quantity-2;
-                                    msg.textContent='success';
-                                }
-                                else{
-                                    msg.textContent='Not Avilable!';
-                                }
-                            });
-
-                            buy3.addEventListener('click',async ()=>{
-                                if(item.quantity>2){
-                                    expence.textContent=`${item.name} - ${item.discription} - ${item.price} - ${item.quantity-3}`
-                                    item.quantity=item.quantity-3;
-                                    msg.textContent='success';
-                                }
-                                else{
-                                    msg.textContent='Not Avilable!';
-                                }
-                            });
+                            expence.textContent=`${item.name}- ${item.price} `;
 
                             del.addEventListener('click',async ()=>{
                                 try{
-                                    await axios.delete(`http://localhost:3000/deleteExpence/${item.id}`)
-                                    msg.textContent='success';
+                                    await axios.delete(`http://localhost:3000/deleteExpence/${item.id}`);
+
+                                    totalValue = totalValue - item.price;
+
+                                    msg.textContent='Deleted';
+
                                     display();
                                 }
                                 catch(err){console.log(err)}
                             });
 
-                            
+                            totalValue = totalValue + item.price;
+                            console.log(totalValue);
+
                             div.appendChild(expence);
-                            div.appendChild(buy1);
-                            div.appendChild(buy2);
-                            div.appendChild(buy3);
                             div.appendChild(del);
                             item_list.appendChild(div);
 
-                        })
+                        });
+                        tv.innerHTML = `${totalValue}`;
                     }
                     catch(err){ console.log(err) }
                 };

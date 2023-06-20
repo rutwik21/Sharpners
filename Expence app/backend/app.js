@@ -19,7 +19,7 @@ try{
     const price = req.body.price;
     const quantity = req.body.quantity;
     let data = await expence.create({name: name,description: description,price: price,quantity: quantity});
-    res.send('success');
+    res.json(data);
   });
 }
 catch(err){console.log(err)};
@@ -32,17 +32,6 @@ try{
   });
 }
 catch(err){console.log(err)};
-// app.patch('/updateUser/:id',async (req,res)=>{
-//   let Uid = req.params.id;
-  
-//   let updateUser = await user.findByPk(Uid);
-//     updateUser.name = req.body.name;
-//     updateUser.phone = req.body.phone;
-//     updateUser.email = req.body.email;
-//     await updateUser.save();
-//     res.json(1);
-
-// });
 
 try{
 app.delete('/deleteExpence/:id', async (req,res)=>{
