@@ -48,21 +48,17 @@
             const obj = {'email':email.value,'password':password.value};
             try{
                 const res = await axios.post("http://localhost:3000/user/loginUser",obj);
-                
-                if(res.data){
-                    if(res.data.pass){
-                        msg.textContent=`Welcome ${res.data.name}`;
-                    }else{
-                        msg.textContent=`Password is incorrect !`;
-                    }
-                    
-                }else{
-                    
-                    msg.textContent='Please try again!';
-                }
-                
+                msg.textContent=`Welcome ${res.data.name}`;
             }
-            catch(err){console.log(err)};
+            catch(err){
+
+                if(err.response.status === 404){
+                    msg.textContent='USER NOT FOUND!';
+                }
+                else{
+                    msg.textContent=`Password is incorrect !`;
+                };
+            };
 
         });
 

@@ -25,19 +25,18 @@ exports.loginUser =async (req,res,next)=>{
 
     try{
         const result = await userConnection.findOne({ where: { email: email } });
-        console.log();
+
         if (result === null){
-            res.json(0);
+            res.status(404).json({user : false});
+        };
+        if(result.password === password){
+            res.json({name: result.name});
         }else{
-            if(result.password === password){
-                res.json({pass : true, name: result.name});
-            }else{
-                res.json({pass : false});
-            }
-            
-        }
+            res.status(401).json({pass : false});
+        };
         
-    }catch(err){console.log(err);res.send(err);};
+    }catch(err){console.log(err)};
+    
 };
 
 
