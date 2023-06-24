@@ -24,11 +24,17 @@ exports.loginUser =async (req,res,next)=>{
     const password = req.body.password;
 
     try{
-        const result = await userConnection.findOne({ where: { email: email, password:password } });
+        const result = await userConnection.findOne({ where: { email: email } });
+        console.log();
         if (result === null){
             res.json(0);
         }else{
-            res.json(result);
+            if(result.password === password){
+                res.json({pass : true, name: result.name});
+            }else{
+                res.json({pass : false});
+            }
+            
         }
         
     }catch(err){console.log(err);res.send(err);};

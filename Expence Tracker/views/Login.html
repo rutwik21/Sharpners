@@ -50,8 +50,14 @@
                 const res = await axios.post("http://localhost:3000/user/loginUser",obj);
                 
                 if(res.data){
-                    msg.textContent=`Welcome ${res.data.name}`;
+                    if(res.data.pass){
+                        msg.textContent=`Welcome ${res.data.name}`;
+                    }else{
+                        msg.textContent=`Password is incorrect !`;
+                    }
+                    
                 }else{
+                    
                     msg.textContent='Please try again!';
                 }
                 
