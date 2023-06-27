@@ -9,7 +9,6 @@ exports.signupUser =async (req,res,next)=>{
     const password = req.body.password;
 
 
-
     try{
         const result = await userConnection.findOne({ where: { email: email } });
 
@@ -40,7 +39,9 @@ exports.loginUser =async (req,res,next)=>{
         };
         
         bcrypt.compare(password, result.password, (err,r) =>{
-            if(r){res.json({name: result.name});}
+            if(r){
+                res.json({name: result.name})
+            }
             else{res.status(401).json({pass : false});}
         });
             

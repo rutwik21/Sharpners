@@ -48,7 +48,8 @@
             const obj = {'email':email.value,'password':password.value};
             try{
                 const res = await axios.post("http://localhost:3000/user/loginUser",obj);
-                msg.textContent=`Welcome ${res.data.name}`;
+                location.replace('index.html');
+                // msg.textContent=`Welcome ${res.data.name}`;
             }
             catch(err){
 
