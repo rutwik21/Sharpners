@@ -1,6 +1,7 @@
 
 const { RESERVED } = require('mysql2/lib/constants/client');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const userConnection = require('../models/user');
 
 exports.signupUser =async (req,res,next)=>{
@@ -40,7 +41,8 @@ exports.loginUser =async (req,res,next)=>{
         
         bcrypt.compare(password, result.password, (err,r) =>{
             if(r){
-                res.json({name: result.name})
+                const userId = jwt.sign(result.id,'secretkey'); 
+                res.json({userId: userId});
             }
             else{res.status(401).json({pass : false});}
         });

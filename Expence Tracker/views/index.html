@@ -49,67 +49,72 @@
             <tbody id = "tbody"></tbody>
         </table>
         
-                
     </div>
     <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"> </script>
     <script>
-        const amount = document.querySelector("#amount");
-        const description = document.querySelector("#description");
-        const category = document.querySelector("#category");
-        const tbody = document.getElementById('tbody');
-        const submit = document.querySelector("#submit");
+        const token = localStorage.getItem('token');
+        if(token){
+            const amount = document.querySelector("#amount");
+            const description = document.querySelector("#description");
+            const category = document.querySelector("#category");
+            const tbody = document.getElementById('tbody');
+            const submit = document.querySelector("#submit");
 
-        submit.addEventListener('click',async ()=>{
-            event.preventDefault();
-            const obj = {'amount':amount.value,'description':description.value,'category':category.value};
-            try{
-                const res = await axios.post("http://localhost:3000/expence/addExpence",obj);
-                display();
-            }
-            catch(err){console.log(err)};
+            submit.addEventListener('click',async ()=>{
+                event.preventDefault();
+                const obj = {'amount':amount.value,'description':description.value,'category':category.value, 'token': token};
+                try{
+                    const res = await axios.post("http://localhost:3000/expence/addExpence",obj);
+                    display();
+                }
+                catch(err){console.log(err)};
 
-        });
+            });
 
-        async function display(){
+            async function display(){
 
-            const res = await axios.get("http://localhost:3000/expence/getExpence");
-            
-            tbody.innerHTML='';
+                
 
-            
-                res.data.forEach(data => {
-                    const tr = document.createElement('tr');
-                    const td1 = document.createElement('td');
-                    const td2 = document.createElement('td');
-                    const td3 = document.createElement('td');
-                    const td4 = document.createElement('td');
-                    const deleteBtn = document.createElement('button');
-                    deleteBtn.className = 'btn btn-danger';
-                    deleteBtn.textContent='Delete';
-                    deleteBtn.addEventListener('click',async ()=>{
-                        try{
-                            await axios.delete(`http://localhost:3000/expence/deleteExpence/${data.id}`);
-                            tbody.removeChild(tr);
-                        }catch(err){console.log(err)};
+                const res = await axios.get("http://localhost:3000/expence/getExpence", { headers : {'Auth' : token}});
+                
+                tbody.innerHTML='';
+
+                
+                    res.data.forEach(data => {
+                        const tr = document.createElement('tr');
+                        const td1 = document.createElement('td');
+                        const td2 = document.createElement('td');
+                        const td3 = document.createElement('td');
+                        const td4 = document.createElement('td');
+                        const deleteBtn = document.createElement('button');
+                        deleteBtn.className = 'btn btn-danger btn-sm';
+                        deleteBtn.textContent='Delete';
+                        deleteBtn.addEventListener('click',async ()=>{
+                            try{
+                                await axios.delete(`http://localhost:3000/expence/deleteExpence/${data.id}`);
+                                tbody.removeChild(tr);
+                            }catch(err){console.log(err)};
+                            
+                        });
+
+                        td1.textContent=`${data.amount}`; 
+                        td2.textContent=`${data.description}`; 
+                        td3.textContent=`${data.category}`; 
+                        td4.appendChild(deleteBtn);
+
+                        tr.appendChild(td1);
+                        tr.appendChild(td2);
+                        tr.appendChild(td3);
+                        tr.appendChild(td4);
+                        tbody.appendChild(tr);
                         
                     });
+                
 
-                    td1.textContent=`${data.amount}`; 
-                    td2.textContent=`${data.description}`; 
-                    td3.textContent=`${data.category}`; 
-                    td4.appendChild(deleteBtn);
-
-                    tr.appendChild(td1);
-                    tr.appendChild(td2);
-                    tr.appendChild(td3);
-                    tr.appendChild(td4);
-                    tbody.appendChild(tr);
-                    
-                });
-            
-
-        };
-        display();
+            };
+            display();
+        }
+        else{location.replace('login.html')}
 
     </script>
 </body>
