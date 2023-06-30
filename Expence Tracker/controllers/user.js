@@ -16,7 +16,7 @@ exports.signupUser =async (req,res,next)=>{
         if (result === null){
             bcrypt.hash(password, 10, async(err,hash)=>{
                 if(err){console.log(err)};
-                await userConnection.create({name : name,email : email,password : hash });
+                await userConnection.create({name : name,email : email,password : hash, isPremiumUser : false });
                 res.json(1);
             });
 
@@ -42,7 +42,7 @@ exports.loginUser =async (req,res,next)=>{
         bcrypt.compare(password, result.password, (err,r) =>{
             if(r){
                 const userId = jwt.sign(result.id,'secretkey'); 
-                res.json({userId: userId});
+                res.json({userId: userId, isPremiumUser: result.isPremiumUser});
             }
             else{res.status(401).json({pass : false});}
         });

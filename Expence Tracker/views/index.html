@@ -13,7 +13,7 @@
                 
         <div class="row-gap-md-5 ">
 
-            <div class="col-md bg-white p-4 mt-5 rounded">
+            <div class="col-md bg-white p-3 mt-5 rounded">
                 
                     <h1 class="text-dark text-center">Add expence</h1><br>
 
@@ -40,8 +40,8 @@
                         
                         <button class="btn btn-success" type="submit" id="submit" >Add Expence</button>
                         
-                    </form><br>
-                    
+                    </form>
+                    <button class="btn btn-outline-primary mt-2" id="buyPremium">Buy Premium</button>
             </div>
         </div>
         <table class="table table-hover bg-white mt-2 text-center rounded">
@@ -50,8 +50,10 @@
         </table>
         
     </div>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"> </script>
     <script>
+        const isPremiumUser = localStorage.getItem('isPremiumUser');
         const token = localStorage.getItem('token');
         if(token){
             const amount = document.querySelector("#amount");
@@ -59,6 +61,7 @@
             const category = document.querySelector("#category");
             const tbody = document.getElementById('tbody');
             const submit = document.querySelector("#submit");
+            const buyPremium = document.getElementById('buyPremium');
 
             submit.addEventListener('click',async ()=>{
                 event.preventDefault();
@@ -71,9 +74,35 @@
 
             });
 
+            if(isPremiumUser){buyPremium.style.visibility = 'hidden'};
+
+            buyPremium.onclick = async (e)=>{
+                const res = await axios.get("http://localhost:3000/purchase/primiumMembership",{headers : {'Auth' : token}});
+                var options = {
+                    "key" : res.data.key_id,
+                    "order_id" : res.data.order.id,
+                    "handler" : async function (responce) {
+                        await axios.post("http://localhost:3000/purchase/updateStatus",{
+                            orderId : options.order_id,
+                            paymentId : responce.razorpay_payment_id
+                        },{ headers : {'Auth' : token}})
+                        buyPremium.style.visibility= 'hidden';
+                    }
+                }
+                const rzp1 = new Razorpay(options);
+                rzp1.open();
+                e.preventDefault();
+
+                rzp1.on('payment.failed', function(responce){
+                    console.log(responce);
+                    alert("somthing went wrong!")
+                })
+            };
+
+            
+
             async function display(){
 
-                
 
                 const res = await axios.get("http://localhost:3000/expence/getExpence", { headers : {'Auth' : token}});
                 

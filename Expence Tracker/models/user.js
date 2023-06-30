@@ -22,7 +22,9 @@ const User = sq.define('user', {
     password: {
       type: sequelize.STRING,
       allowNull: false
-    }
+    },
+    isPremiumUser: sequelize.BOOLEAN
+
   });
   
   module.exports = User;
