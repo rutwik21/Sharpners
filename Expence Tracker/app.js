@@ -1,11 +1,14 @@
 const express = require("express");
 const bodyP = require("body-parser");
 const cors = require('cors');
+
 const connection = require('./util/connection');
+
 
 const userRoute = require('./routes/user');
 const expenceRoute = require('./routes/expence');
-const orderRoute = require('./routes/purchase')
+const orderRoute = require('./routes/purchase');
+const premiumRoute = require('./routes/premium');
 
 const user = require('./models/user');
 const expence = require('./models/expence');
@@ -20,6 +23,7 @@ app.use(express.json());
 app.use('/user',userRoute);
 app.use('/expence',expenceRoute);
 app.use('/purchase', orderRoute);
+app.use('/premium', premiumRoute);
 
 user.hasMany(expence);
 expence.belongsTo(user);
