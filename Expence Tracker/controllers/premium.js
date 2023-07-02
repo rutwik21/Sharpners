@@ -5,10 +5,11 @@ const usertable = require('../models/user');
 exports.showLeaderboard = async (req,res,next)=>{
 
     try{
-        const result =await expenceTable.findAll({
-            attributes:[[sequelize.fn('sum', sequelize.col('amount')), 'total_amount'],'userId'],
-         group:"userId",
-         include : [{ model : usertable}] 
+        const result =await usertable.findAll({
+            attributes:['name',[sequelize.fn('sum', sequelize.col('expences.amount')), 'total_amount']],
+            include : [{ model : expenceTable, attributes:[]}], 
+            group:"user.id",
+            order : [['total_amount', 'DESC']]
         });
 
         res.json(result);

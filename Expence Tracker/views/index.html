@@ -85,14 +85,20 @@
                     LeaderboardHead.appendChild(totalAmountth);
 
                     const res = await axios.get("http://localhost:3000/premium/showLeaderboard",{headers : {'Auth' : token}});
+                    console.log(res);
                     res.data.forEach(data =>{
                         
                         const tr = document.createElement('tr');
                         const td1 = document.createElement('td');
                         const td2 = document.createElement('td');
 
-                        td1.textContent = data.user.name;
-                        td2.textContent = data.total_amount;
+                        td1.textContent = data.name;
+                        if(data.total_amount != null){
+                            td2.textContent = data.total_amount;
+                        }else{
+                            td2.textContent = 0;
+                        }
+                        
                         tr.appendChild(td1);
                         tr.appendChild(td2);
 
