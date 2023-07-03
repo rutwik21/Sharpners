@@ -93,8 +93,8 @@
                         const td2 = document.createElement('td');
 
                         td1.textContent = data.name;
-                        if(data.total_amount != null){
-                            td2.textContent = data.total_amount;
+                        if(data.totalExpence != null){
+                            td2.textContent = data.totalExpence;
                         }else{
                             td2.textContent = 0;
                         }
@@ -128,6 +128,7 @@
                                 paymentId : responce.razorpay_payment_id
                             },{ headers : {'Auth' : token}})
                             localStorage.setItem('isPremiumUser', true);
+                            location.reload();
                         }
                     };
                     const rzp1 = new Razorpay(options);
@@ -201,11 +202,6 @@
 
             };
             display();
-
-
-            
-                
-
 
 
         }

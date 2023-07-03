@@ -1,4 +1,5 @@
 const expenceTable = require('../models/expence');
+const usertable = require('../models/user');
 const jwt = require('jsonwebtoken');
 
 exports.addExpence = async(req,res,next)=>{
@@ -6,8 +7,13 @@ exports.addExpence = async(req,res,next)=>{
     const description = req.body.description;
     const category = req.body.category;
     const userId = jwt.verify(req.body.token,'secretkey');
+
     try{
         await expenceTable.create({amount : amount,description : description,category : category, userId : userId});
+        const user = await usertable.findByPk(userId);
+        const updatetotal = user.totalExpence +Number(amount);
+        user.totalExpence = updatetotal;
+        user.save();
         res.end()
     }catch(err){console.log(err);res.status(401)};
 };

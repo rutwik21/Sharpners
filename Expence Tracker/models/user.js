@@ -23,7 +23,11 @@ const User = sq.define('user', {
       type: sequelize.STRING,
       allowNull: false
     },
-    isPremiumUser: sequelize.BOOLEAN
+    isPremiumUser: sequelize.BOOLEAN,
+    totalExpence: {
+      type :sequelize.INTEGER,
+      allowNull: false
+    }
 
   });
   

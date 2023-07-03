@@ -16,7 +16,7 @@ exports.signupUser =async (req,res,next)=>{
         if (result === null){
             bcrypt.hash(password, 10, async(err,hash)=>{
                 if(err){console.log(err)};
-                await userConnection.create({name : name,email : email,password : hash, isPremiumUser : false });
+                await userConnection.create({name : name,email : email,password : hash, isPremiumUser : false, totalExpence : 0 });
                 res.json(1);
             });
 
