@@ -23,6 +23,8 @@
                             <label for="email" class="form-label">Email:</label><br>
                         </div>
                         <button class="btn btn-success" type="submit" id="submit">Send mail</button>
+                        <div id="msg" class="text-danger-emphasis text-center"></div>
+                    
                     </form>
 
             </div>
@@ -32,11 +34,13 @@
     <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"> </script>
     <script>
         const email = document.getElementById('email');
+        const msg = document.getElementById('msg');
         const submit = document.getElementById('submit');
 
         submit.addEventListener('click', async()=>{
             event.preventDefault();
             const res = await axios.post("http://localhost:3000/password/forgotPassword",{email : email.value});
+            
             console.log(res);
         });
     </script>
