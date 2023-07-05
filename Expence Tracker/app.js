@@ -9,6 +9,7 @@ const userRoute = require('./routes/user');
 const expenceRoute = require('./routes/expence');
 const orderRoute = require('./routes/purchase');
 const premiumRoute = require('./routes/premium');
+const passwordRoute = require('./routes/password');
 
 const user = require('./models/user');
 const expence = require('./models/expence');
@@ -24,6 +25,7 @@ app.use('/user',userRoute);
 app.use('/expence',expenceRoute);
 app.use('/purchase', orderRoute);
 app.use('/premium', premiumRoute);
+app.use('/password', passwordRoute);
 
 user.hasMany(expence);
 expence.belongsTo(user);
