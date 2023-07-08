@@ -34,6 +34,6 @@ user.hasMany(order);
 order.belongsTo(user);
 
 connection
-  .sync({})
+  .sync()
   .then(result => app.listen(3000))
   .catch(err => console.log(err));

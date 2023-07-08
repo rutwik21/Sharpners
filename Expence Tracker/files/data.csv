@@ -1,0 +1,3 @@
+id,amount,description,category,type,createdAt,updatedAt,userId
+16,1000,Dubai,income,income,Thu Jul 06 2023 18:24:41 GMT+0530 (India Standard Time),Thu Jul 06 2023 18:24:41 GMT+0530 (India Standard Time),1
+17,1000,Dubai,income,expence,Thu Jul 06 2023 18:24:44 GMT+0530 (India Standard Time),Thu Jul 06 2023 18:24:44 GMT+0530 (India Standard Time),1

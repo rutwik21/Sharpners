@@ -20,7 +20,11 @@ const Expence = sq.define('expence', {
     },
     category: {
         type: sequelize.STRING
-      }
+      },
+    type:{
+      type:sequelize.STRING,
+      allowNull:false
+    }
   });
   
   module.exports = Expence;

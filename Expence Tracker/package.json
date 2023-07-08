@@ -21,6 +21,7 @@
     "ejs": "^3.1.9",
     "express": "^4.16.3",
     "express-handlebars": "^7.0.7",
+    "json-2-csv": "^4.0.0",
     "jsonwebtoken": "^9.0.0",
     "mysql2": "^1.6.1",
     "pug": "^3.0.2",

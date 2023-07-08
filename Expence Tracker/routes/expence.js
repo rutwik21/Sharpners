@@ -11,4 +11,6 @@ router.get('/getExpence', Autherization.auth, expenceController.getExpence);
 
 router.delete('/deleteExpence/:id',expenceController.deleteExpence);
 
+router.get("/download",Autherization.auth , expenceController.download);
+
 module.exports = router;
