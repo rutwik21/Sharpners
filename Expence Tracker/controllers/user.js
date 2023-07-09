@@ -2,7 +2,7 @@
 const { RESERVED } = require('mysql2/lib/constants/client');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const userConnection = require('../models/user');
+const UserServices = require('../services/userServices');
 
 exports.signupUser =async (req,res,next)=>{
     const name = req.body.name;
@@ -11,12 +11,12 @@ exports.signupUser =async (req,res,next)=>{
 
 
     try{
-        const result = await userConnection.findOne({ where: { email: email } });
+        const result = await UserServices.findOne(email);
 
         if (result === null){
             bcrypt.hash(password, 10, async(err,hash)=>{
                 if(err){console.log(err)};
-                await userConnection.create({name : name,email : email,password : hash, isPremiumUser : false, totalExpence : 0 });
+                await UserServices.create(name,email,hash);
                 res.json(1);
             });
 
@@ -33,7 +33,7 @@ exports.loginUser =async (req,res,next)=>{
     const password = req.body.password;
 
     try{
-        const result = await userConnection.findOne({ where: { email: email } });
+        const result = await UserServices.findOne(email);
 
         if (result === null){
             res.status(404).json({user : false});

@@ -1,10 +1,13 @@
 const expenceTable = require('../models/expence');
 const usertable = require('../models/user');
 const sq = require('../util/connection');
+const S3services =require('../services/S3services');
+
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
 const converter = require('json-2-csv');
+
 
 exports.addExpence = async(req,res,next)=>{
     const t = await sq.transaction(); 
@@ -66,12 +69,12 @@ exports.download = async(req,res,next)=>{
             if(err){console.log(err)}
             return csv;
         });
-
-        fs.writeFileSync("./files/data.csv",b);
-        res.status(201).json({fileUrl : "../files/data.csv"})
+        const fileUrl = await S3services.uploadToS3(b,'data.csv');
+        res.status(201).json({fileUrl : fileUrl})
         
     }
     catch(err){
         console.log(err);
     }
 }
+
