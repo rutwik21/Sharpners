@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const path = require('path');
 const converter = require('json-2-csv');
+const { resourceLimits } = require('worker_threads');
+const { Console } = require('console');
 
 
 exports.addExpence = async(req,res,next)=>{
@@ -32,8 +34,18 @@ exports.addExpence = async(req,res,next)=>{
 };
 
 exports.getExpence = async(req,res,next)=>{
-    const data = await expenceTable.findAll({where : {userId : req.user.id}});
-    res.json(data);
+    try{
+        const page = req.query.page;
+        const limit = 10;
+        const offset = (page-1)*limit;
+        const data = await expenceTable.findAll({where : {userId : req.user.id},offset: offset,limit:limit});
+        const totalCount = await expenceTable.count({where:{userId : req.user.id}});
+        const hasPrevious = page>1;
+        const hasNext=limit*page < totalCount;
+
+        res.json({data:data,hasNext:hasNext,hasPrevious:hasPrevious});
+    }catch(err){console.log(err)}
+    
 };
 
 exports.deleteExpence = async(req,res,next)=>{

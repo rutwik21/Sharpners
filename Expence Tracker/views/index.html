@@ -51,6 +51,11 @@
             <thead class="bg-body-tertiary"><th>Date</th><th>Description</th><th>Category</th><th>Income</th><th>Expence</th><th> </th></thead>
             <tbody id = "tbody"></tbody>
         </table>
+        <div class="row justify-content-center">
+            <div id="showbtn"class="col-auto"></div>
+            <div id="previous"class="col-auto"></div>
+        </div>
+        
         <h3 id="h3"></h3>
         <table class="table table-hover bg-white mt-2 text-center rounded">
             <thead id="LeaderboardHead" class="bg-success-subtle"></thead>
@@ -185,6 +190,8 @@
             const category = document.querySelector("#category");
             const tbody = document.getElementById('tbody');
             const submit = document.querySelector("#submit");
+            const showbtn = document.querySelector('#showbtn');
+            const previous = document.querySelector('#previous')
 
             submit.addEventListener('click',async ()=>{
                 event.preventDefault();
@@ -197,33 +204,57 @@
                 
                 try{
                     const res = await axios.post("http://localhost:3000/expence/addExpence",obj);
-                    display();
+                    display(1);
                 }
                 catch(err){console.log(err)};
 
             });
 
-            async function display(){
+            async function display(page){
 
-                const res = await axios.get("http://localhost:3000/expence/getExpence", { headers : {'Auth' : token}});
+                const res = await axios.get(`http://localhost:3000/expence/getExpence?page=${page}`, { headers : {'Auth' : token}});
                 
                 tbody.innerHTML='';
+                showbtn.innerHTML='';
+                previous.innerHTML='';
+                if(res.data.hasNext){
+                    
+                    const showMore = document.createElement('button');
+                    showMore.textContent="Next";
+                    showMore.className="btn btn-outline-dark ";
+                    showMore.addEventListener('click',()=>{
+                        display(page+1);
+                    });
+                    showbtn.appendChild(showMore);
+                }
+                
+                if(res.data.hasPrevious){
+                    
+                    const showLessbtn = document.createElement('button');
+                    showLessbtn.textContent="Previous";
+                    showLessbtn.className="btn btn-outline-dark ";
+                    showLessbtn.addEventListener('click',()=>{
+                        display(page-1);
+                    });
+                    previous.appendChild(showLessbtn);
+                }
+                
+                
+                const total = document.createElement('tr');
+                const td7 = document.createElement('td');
+                const td8 = document.createElement('td');
+                const td9 = document.createElement('td');
+                const totalIncome = document.createElement('td');
+                const totalExpence = document.createElement('td');
+                const remaining = document.createElement('td');
 
-                    const total = document.createElement('tr');
-                    const td7 = document.createElement('td');
-                    const td8 = document.createElement('td');
-                    const td9 = document.createElement('td');
-                    const totalIncome = document.createElement('td');
-                    const totalExpence = document.createElement('td');
-                    const remaining = document.createElement('td');
-
-                    totalIncome.textContent='0';
-                    totalExpence.textContent='0';
-                    remaining.textContent='0';
+                totalIncome.textContent='0';
+                totalExpence.textContent='0';
+                remaining.textContent='0';
 
 
 
-                    res.data.forEach(data => {
+                    res.data.data.forEach(data => {
                         const tr = document.createElement('tr');
                         const td1 = document.createElement('td');
                         const td2 = document.createElement('td');
@@ -303,48 +334,7 @@
                 }
                 
             };
-            display();
-            
-
-            // async function display(){
-
-            //     const res = await axios.get("http://localhost:3000/expence/getExpence", { headers : {'Auth' : token}});
-                
-            //     tbody.innerHTML='';
-
-                
-            //         res.data.forEach(data => {
-            //             const tr = document.createElement('tr');
-            //             const td1 = document.createElement('td');
-            //             const td2 = document.createElement('td');
-            //             const td3 = document.createElement('td');
-            //             const td4 = document.createElement('td');
-            //             const deleteBtn = document.createElement('button');
-            //             deleteBtn.className = 'btn btn-danger btn-sm';
-            //             deleteBtn.textContent='Delete';
-            //             deleteBtn.addEventListener('click',async ()=>{
-            //                 try{
-            //                     await axios.delete(`http://localhost:3000/expence/deleteExpence/${data.id}`);
-            //                     tbody.removeChild(tr);
-            //                 }catch(err){console.log(err)};
-                            
-            //             });
-
-            //             td1.textContent=`${data.amount}`; 
-            //             td2.textContent=`${data.description}`; 
-            //             td3.textContent=`${data.category}`; 
-            //             td4.appendChild(deleteBtn);
-
-            //             tr.appendChild(td1);
-            //             tr.appendChild(td2);
-            //             tr.appendChild(td3);
-            //             tr.appendChild(td4);
-            //             tbody.appendChild(tr);
-                        
-            //         });
-                
-
-            // };
+            display(1);
 
 
         }
