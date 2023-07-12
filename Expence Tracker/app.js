@@ -1,6 +1,10 @@
 const express = require("express");
 const bodyP = require("body-parser");
 const cors = require('cors');
+const helmet = require('helmet');
+const morgan = require('morgan');
+const path = require('path');
+const fs = require('fs');
 
 const connection = require('./util/connection');
 
@@ -17,9 +21,13 @@ const order = require('./models/orders');
  
 const app =express();
 
+const accessLogStream = fs.createWriteStream(path.join(__dirname,'data.log'))
 
 app.use(cors());
+app.use(helmet());
+app.use(morgan('combined', {stream: accessLogStream}))
 app.use(express.json());
+
 
 app.use('/user',userRoute);
 app.use('/expence',expenceRoute);

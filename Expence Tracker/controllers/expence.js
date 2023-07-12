@@ -35,7 +35,6 @@ exports.addExpence = async(req,res,next)=>{
 
 exports.getExpence = async(req,res,next)=>{
     try{
-        console.log(req.query)
         const page = req.query.page;
         const limit = Number(req.query.limit);
 
