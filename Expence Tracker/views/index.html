@@ -54,6 +54,14 @@
         <div class="row justify-content-center">
             <div id="showbtn"class="col-auto"></div>
             <div id="previous"class="col-auto"></div>
+            
+            <select id="rowsPerPage" class="col-auto rounded" onchange="changeRows(this.value)" on>
+                <option> rows per page</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+            </select>
+            
         </div>
         
         <h3 id="h3"></h3>
@@ -180,6 +188,11 @@
                 form_container.appendChild(buyPremium);
             }
 
+            function changeRows(value){
+                localStorage.setItem('rowsPerPage',value)
+                location.reload();
+            }
+
 
 
 
@@ -191,7 +204,9 @@
             const tbody = document.getElementById('tbody');
             const submit = document.querySelector("#submit");
             const showbtn = document.querySelector('#showbtn');
-            const previous = document.querySelector('#previous')
+            const previous = document.querySelector('#previous');
+            const rowsPerPage =Number(localStorage.getItem('rowsPerPage')) ;
+            console.log(typeof rowsPerPage, rowsPerPage);
 
             submit.addEventListener('click',async ()=>{
                 event.preventDefault();
@@ -211,12 +226,17 @@
             });
 
             async function display(page){
+                let res;
 
-                const res = await axios.get(`http://localhost:3000/expence/getExpence?page=${page}`, { headers : {'Auth' : token}});
-                
+                if(rowsPerPage>=5){
+                    res = await axios.get(`http://localhost:3000/expence/getExpence?page=${page}&limit=${rowsPerPage}`, { headers : {'Auth' : token}});
+                }else{
+                    res = await axios.get(`http://localhost:3000/expence/getExpence?page=${page}&limit=10`, { headers : {'Auth' : token}});
+                }
                 tbody.innerHTML='';
                 showbtn.innerHTML='';
                 previous.innerHTML='';
+                
                 if(res.data.hasNext){
                     
                     const showMore = document.createElement('button');

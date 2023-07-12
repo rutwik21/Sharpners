@@ -35,8 +35,10 @@ exports.addExpence = async(req,res,next)=>{
 
 exports.getExpence = async(req,res,next)=>{
     try{
+        console.log(req.query)
         const page = req.query.page;
-        const limit = 10;
+        const limit = Number(req.query.limit);
+
         const offset = (page-1)*limit;
         const data = await expenceTable.findAll({where : {userId : req.user.id},offset: offset,limit:limit});
         const totalCount = await expenceTable.count({where:{userId : req.user.id}});
