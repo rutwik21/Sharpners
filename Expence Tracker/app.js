@@ -34,6 +34,9 @@ app.use('/expence',expenceRoute);
 app.use('/purchase', orderRoute);
 app.use('/premium', premiumRoute);
 app.use('/password', passwordRoute);
+app.use((req,res)=>{
+ res.send(path.join(__dirname,`views/Login.html`));
+})
 
 user.hasMany(expence);
 expence.belongsTo(user);
