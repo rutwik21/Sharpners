@@ -28,6 +28,10 @@ app.use(helmet());
 app.use(morgan('combined', {stream: accessLogStream}))
 app.use(express.json());
 
+app.use((req,res)=>{
+ res.sendFile(path.join(__dirname,`views/${req.url}`));
+ });
+ 
 
 app.use('/user',userRoute);
 app.use('/expence',expenceRoute);
