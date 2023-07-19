@@ -28,9 +28,6 @@ app.use(helmet());
 app.use(morgan('combined', {stream: accessLogStream}))
 app.use(express.json());
 
-app.use((req,res)=>{
- res.sendFile(path.join(__dirname,`views/${req.url}`));
- });
  
 
 app.use('/user',userRoute);
@@ -38,9 +35,11 @@ app.use('/expence',expenceRoute);
 app.use('/purchase', orderRoute);
 app.use('/premium', premiumRoute);
 app.use('/password', passwordRoute);
+
+
 app.use((req,res)=>{
- res.send(path.join(__dirname,`views/Login.html`));
-})
+  res.sendFile(path.join(__dirname,`views/${req.url}`));
+  });
 
 user.hasMany(expence);
 expence.belongsTo(user);
