@@ -54,7 +54,7 @@
             event.preventDefault();
             const obj = {'name':name.value,'email':email.value,'password':password.value};
             try{
-                const res = await axios.post("http://localhost:3000/user/signupUser",obj);
+                const res = await axios.post("http://54.236.200.99:3000/user/signupUser",obj);
                 
                 if(res.data){
                     msg.textContent='Success';

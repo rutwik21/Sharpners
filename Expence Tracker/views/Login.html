@@ -17,7 +17,7 @@
                 
                     <h1 class="text-dark text-center">Login</h1><br>
 
-                    <form action="http://localhost:3000/user/loginUser" method="post">
+                    <form action="http://54.236.200.99:3000/user/loginUser" method="post">
                         
                         <div class="form-floating">
                             <input type="email" id="email" required class="form-control" placeholder="m" >
@@ -49,7 +49,7 @@
             event.preventDefault();
             const obj = {'email':email.value,'password':password.value};
             try{
-                const res = await axios.post("http://localhost:3000/user/loginUser",obj);
+                const res = await axios.post("http://54.236.200.99:3000/user/loginUser",obj);
                 localStorage.setItem('token',res.data.userId ) ;
                 localStorage.setItem('isPremiumUser', res.data.isPremiumUser);
                 location.replace('index.html');

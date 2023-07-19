@@ -95,7 +95,7 @@
 
                 downloadReport.addEventListener('click',async()=>{
                     
-                    await axios.get("http://localhost:3000/expence/download",{headers : {'Auth' : token}}).then((response)=>{
+                    await axios.get("http://54.236.200.99:3000/expence/download",{headers : {'Auth' : token}}).then((response)=>{
                        console.log(response);
                         if(response.status === 201){
                             
@@ -127,7 +127,7 @@
                     LeaderboardHead.appendChild(nameth);
                     LeaderboardHead.appendChild(totalAmountth);
 
-                    const res = await axios.get("http://localhost:3000/premium/showLeaderboard",{headers : {'Auth' : token}});
+                    const res = await axios.get("http://54.236.200.99:3000/premium/showLeaderboard",{headers : {'Auth' : token}});
                     
                     res.data.forEach(data =>{
                         
@@ -162,12 +162,12 @@
                 buyPremium.textContent = "Buy Premium";
 
                 buyPremium.addEventListener('click',async (e)=>{
-                    const res = await axios.get("http://localhost:3000/purchase/primiumMembership",{headers : {'Auth' : token}});
+                    const res = await axios.get("http://54.236.200.99:3000/purchase/primiumMembership",{headers : {'Auth' : token}});
                     var options = {
                         "key" : res.data.key_id,
                         "order_id" : res.data.order.id,
                         "handler" : async function (responce) {
-                            await axios.post("http://localhost:3000/purchase/updateStatus",{
+                            await axios.post("http://54.236.200.99:3000/purchase/updateStatus",{
                                 orderId : options.order_id,
                                 paymentId : responce.razorpay_payment_id
                             },{ headers : {'Auth' : token}})
@@ -218,7 +218,7 @@
                 }
                 
                 try{
-                    const res = await axios.post("http://localhost:3000/expence/addExpence",obj);
+                    const res = await axios.post("http://54.236.200.99:3000/expence/addExpence",obj);
                     display(1);
                 }
                 catch(err){console.log(err)};
@@ -229,9 +229,9 @@
                 let res;
 
                 if(rowsPerPage>=5){
-                    res = await axios.get(`http://localhost:3000/expence/getExpence?page=${page}&limit=${rowsPerPage}`, { headers : {'Auth' : token}});
+                    res = await axios.get(`http://54.236.200.99:3000/expence/getExpence?page=${page}&limit=${rowsPerPage}`, { headers : {'Auth' : token}});
                 }else{
-                    res = await axios.get(`http://localhost:3000/expence/getExpence?page=${page}&limit=10`, { headers : {'Auth' : token}});
+                    res = await axios.get(`http://54.236.200.99:3000/expence/getExpence?page=${page}&limit=10`, { headers : {'Auth' : token}});
                 }
                 tbody.innerHTML='';
                 showbtn.innerHTML='';
@@ -295,7 +295,7 @@
                             totalIncome.textContent = Number(totalIncome.textContent)+Number(data.amount);
                             deleteBtn.addEventListener('click',async ()=>{
                                 try{
-                                    await axios.delete(`http://localhost:3000/expence/deleteExpence/${data.id}`);
+                                    await axios.delete(`http://54.236.200.99:3000/expence/deleteExpence/${data.id}`);
                                     totalIncome.textContent = Number(totalIncome.textContent)-Number(data.amount);
                                     remaining.textContent =Number(totalIncome.textContent)-Number(totalExpence.textContent);
                                     tbody.removeChild(tr);
@@ -309,7 +309,7 @@
                             totalExpence.textContent =Number(totalExpence.textContent)+Number(data.amount);
                             deleteBtn.addEventListener('click',async ()=>{
                                 try{
-                                    await axios.delete(`http://localhost:3000/expence/deleteExpence/${data.id}`);
+                                    await axios.delete(`http://54.236.200.99:3000/expence/deleteExpence/${data.id}`);
                                     totalExpence.textContent =Number(totalExpence.textContent)-Number(data.amount);
                                     remaining.textContent =Number(totalIncome.textContent)-Number(totalExpence.textContent);
                                     tbody.removeChild(tr);
