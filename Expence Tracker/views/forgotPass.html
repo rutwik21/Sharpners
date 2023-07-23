@@ -32,18 +32,7 @@
     </div>
 
     <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"> </script>
-    <script>
-        const email = document.getElementById('email');
-        const msg = document.getElementById('msg');
-        const submit = document.getElementById('submit');
-
-        submit.addEventListener('click', async()=>{
-            event.preventDefault();
-            const res = await axios.post("http://54.236.200.99:3000/password/forgotPassword",{email : email.value});
-            
-            console.log(res);
-        });
-    </script>
+    <script src="forgotPass.js"></script>
 </body>
 </html>
 
