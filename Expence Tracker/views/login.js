@@ -8,7 +8,7 @@ submit.addEventListener('click',async ()=>{
     event.preventDefault();
     const obj = {'email':email.value,'password':password.value};
     try{
-        const res = await axios.post("http://54.236.200.99:3000/user/loginUser",obj);
+        const res = await axios.post("http://3.90.229.193:3000/user/loginUser",obj);
         localStorage.setItem('token',res.data.userId ) ;
         localStorage.setItem('isPremiumUser', res.data.isPremiumUser);
         location.replace('index.html');
