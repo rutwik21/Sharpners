@@ -24,9 +24,18 @@ const app =express();
 const accessLogStream = fs.createWriteStream(path.join(__dirname,'data.log'))
 
 app.use(cors());
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      "default-src" : '*',
+      "script-src": ['*',"'unsafe-inline'"],
+    },
+  },
+  accessControlAllowOrigin: 'self',
+}));
 app.use(morgan('combined', {stream: accessLogStream}))
 app.use(express.json());
+
 
  
 
@@ -38,7 +47,7 @@ app.use('/password', passwordRoute);
 
 
 app.use((req,res)=>{
-  res.sendFile(path.join(__dirname,`views/${req.url}`));
+  res.sendFile(path.join(__dirname + '/views', `/${req.url}`));
   });
 
 user.hasMany(expence);
