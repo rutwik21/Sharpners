@@ -19,7 +19,7 @@ const isPremiumUser = localStorage.getItem('isPremiumUser');
 
                 downloadReport.addEventListener('click',async()=>{
                     
-                    await axios.get("http://3.90.229.193:3000/expence/download",{headers : {'Auth' : token}}).then((response)=>{
+                    await axios.get("https://3.90.229.193:3000/expence/download",{headers : {'Auth' : token}}).then((response)=>{
                        console.log(response);
                         if(response.status === 201){
                             
@@ -51,7 +51,7 @@ const isPremiumUser = localStorage.getItem('isPremiumUser');
                     LeaderboardHead.appendChild(nameth);
                     LeaderboardHead.appendChild(totalAmountth);
 
-                    const res = await axios.get("http://3.90.229.193:3000/premium/showLeaderboard",{headers : {'Auth' : token}});
+                    const res = await axios.get("https://3.90.229.193:3000/premium/showLeaderboard",{headers : {'Auth' : token}});
                     
                     res.data.forEach(data =>{
                         
@@ -86,12 +86,12 @@ const isPremiumUser = localStorage.getItem('isPremiumUser');
                 buyPremium.textContent = "Buy Premium";
 
                 buyPremium.addEventListener('click',async (e)=>{
-                    const res = await axios.get("http://3.90.229.193:3000/purchase/primiumMembership",{headers : {'Auth' : token}});
+                    const res = await axios.get("https://3.90.229.193:3000/purchase/primiumMembership",{headers : {'Auth' : token}});
                     var options = {
                         "key" : res.data.key_id,
                         "order_id" : res.data.order.id,
                         "handler" : async function (responce) {
-                            await axios.post("http://3.90.229.193:3000/purchase/updateStatus",{
+                            await axios.post("https://3.90.229.193:3000/purchase/updateStatus",{
                                 orderId : options.order_id,
                                 paymentId : responce.razorpay_payment_id
                             },{ headers : {'Auth' : token}})
@@ -142,7 +142,7 @@ const isPremiumUser = localStorage.getItem('isPremiumUser');
                 }
                 
                 try{
-                    const res = await axios.post("http://3.90.229.193:3000/expence/addExpence",obj);
+                    const res = await axios.post("https://3.90.229.193:3000/expence/addExpence",obj);
                     display(1);
                 }
                 catch(err){console.log(err)};
@@ -153,9 +153,9 @@ const isPremiumUser = localStorage.getItem('isPremiumUser');
                 let res;
 
                 if(rowsPerPage>=5){
-                    res = await axios.get(`http://3.90.229.193:3000/expence/getExpence?page=${page}&limit=${rowsPerPage}`, { headers : {'Auth' : token}});
+                    res = await axios.get(`https://3.90.229.193:3000/expence/getExpence?page=${page}&limit=${rowsPerPage}`, { headers : {'Auth' : token}});
                 }else{
-                    res = await axios.get(`http://3.90.229.193:3000/expence/getExpence?page=${page}&limit=10`, { headers : {'Auth' : token}});
+                    res = await axios.get(`https://3.90.229.193:3000/expence/getExpence?page=${page}&limit=10`, { headers : {'Auth' : token}});
                 }
                 tbody.innerHTML='';
                 showbtn.innerHTML='';
@@ -219,7 +219,7 @@ const isPremiumUser = localStorage.getItem('isPremiumUser');
                             totalIncome.textContent = Number(totalIncome.textContent)+Number(data.amount);
                             deleteBtn.addEventListener('click',async ()=>{
                                 try{
-                                    await axios.delete(`http://3.90.229.193:3000/expence/deleteExpence/${data.id}`);
+                                    await axios.delete(`https://3.90.229.193:3000/expence/deleteExpence/${data.id}`);
                                     totalIncome.textContent = Number(totalIncome.textContent)-Number(data.amount);
                                     remaining.textContent =Number(totalIncome.textContent)-Number(totalExpence.textContent);
                                     tbody.removeChild(tr);
@@ -233,7 +233,7 @@ const isPremiumUser = localStorage.getItem('isPremiumUser');
                             totalExpence.textContent =Number(totalExpence.textContent)+Number(data.amount);
                             deleteBtn.addEventListener('click',async ()=>{
                                 try{
-                                    await axios.delete(`http://3.90.229.193:3000/expence/deleteExpence/${data.id}`);
+                                    await axios.delete(`https://3.90.229.193:3000/expence/deleteExpence/${data.id}`);
                                     totalExpence.textContent =Number(totalExpence.textContent)-Number(data.amount);
                                     remaining.textContent =Number(totalIncome.textContent)-Number(totalExpence.textContent);
                                     tbody.removeChild(tr);
