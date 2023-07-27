@@ -8,7 +8,7 @@ submit.addEventListener('click',async ()=>{
     event.preventDefault();
     const obj = {'name':name.value,'email':email.value,'password':password.value};
     try{
-        const res = await axios.post("https://3.90.229.193:3000/user/signupUser",obj);
+        const res = await axios.post("http://3.90.229.193:3000/user/signupUser",obj);
         
         if(res.data){
             msg.textContent='Success';
