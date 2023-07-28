@@ -130,7 +130,7 @@ const isPremiumUser = localStorage.getItem('isPremiumUser');
             const showbtn = document.querySelector('#showbtn');
             const previous = document.querySelector('#previous');
             const rowsPerPage =Number(localStorage.getItem('rowsPerPage')) ;
-            console.log(typeof rowsPerPage, rowsPerPage);
+            
 
             submit.addEventListener('click',async ()=>{
                 event.preventDefault();
