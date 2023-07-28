@@ -4,7 +4,7 @@ const submit = document.getElementById('submit');
 
 submit.addEventListener('click', async()=>{
     event.preventDefault();
-    const res = await axios.post("http://3.90.229.193:3000/password/forgotPassword",{email : email.value});
+    const res = await axios.post("http://3.90.229.193/password/forgotPassword",{email : email.value});
     
     console.log(res);
 });
