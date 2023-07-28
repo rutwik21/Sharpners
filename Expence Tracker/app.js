@@ -29,7 +29,7 @@ app.use(helmet({
     directives: {
       "default-src" : '*',
       "script-src": ['*',"'unsafe-inline'"],
-      "script-src-attr":"'unsafe-inline",
+      "script-src-attr":"'unsafe-inline'",
     },
   },
 }));
