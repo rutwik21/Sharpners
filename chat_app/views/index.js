@@ -14,7 +14,12 @@ async function getChats(){
         const small = document.createElement('small');
         const msgdiv = document.createElement('div');
 
-        newdiv.className='card border-0 w-75 p-2 mb-2 bg-body-secondary float-end';
+        if(element.name === name){
+            newdiv.className='card border-0 w-75 p-2 mb-2 bg-body-secondary float-end';
+        }else{
+            newdiv.className='card border-0 bg-body-secondary p-2 w-75 mb-2'
+        }
+        
         small.className='text-secondary';
         msgdiv.className='card-text';
 
@@ -28,7 +33,7 @@ async function getChats(){
     });
 }
 getChats();
-
+setInterval(()=>{getChats()},1000);
 
     send.addEventListener('click',async ()=>{
         event.preventDefault();
@@ -69,6 +74,8 @@ getChats();
         
     
     });
+
+    
 
 }else{
     location.replace('login.html');
