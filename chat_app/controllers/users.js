@@ -43,7 +43,7 @@ exports.loginUser =async (req,res,next)=>{
         bcrypt.compare(password, result.password, (err,r) =>{
             if(r){
                 const userId = jwt.sign(result.id,'secretkey'); 
-                res.json({userId: userId});
+                res.json({userId: userId,name:result.name});
             }
             else{res.status(401).json({pass : false});}
         });

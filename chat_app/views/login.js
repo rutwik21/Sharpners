@@ -10,7 +10,7 @@ submit.addEventListener('click',async ()=>{
     try{
         const res = await axios.post("http://localhost:3000/user/loginUser",obj);
         localStorage.setItem('token',res.data.userId ) ;
-        localStorage.setItem('isPremiumUser', res.data.isPremiumUser);
+        localStorage.setItem('name',res.data.name ) ;
         location.replace('index.html');
     }
     catch(err){

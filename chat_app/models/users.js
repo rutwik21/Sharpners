@@ -11,8 +11,8 @@ const User = sq.define('users', {
       primaryKey: true
     },
     name: {
-        type :sequelize.STRING,
-        allowNull: false
+      type :sequelize.STRING,
+      allowNull: false
     },
     email: {
       type: sequelize.STRING,
@@ -20,9 +20,9 @@ const User = sq.define('users', {
       unique: true
     },
     phone: {
-      type:sequelize.NUMBER,
+      type: sequelize.STRING,
       allowNull: false,
-      unique:true
+      unique: true,
     },
     password: {
       type: sequelize.STRING,

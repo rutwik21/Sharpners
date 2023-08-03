@@ -5,5 +5,5 @@ return await userConnection.findOne({ where: { email: email } });
 };
 
 exports.create = async(name,email,phone,hash)=>{
-return await userConnection.create({name : name,email : email,phone : Number(phone),password : hash});
+return await userConnection.create({name : name,email : email,phone : phone,password : hash});
 };

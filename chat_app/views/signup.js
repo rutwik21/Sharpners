@@ -3,6 +3,7 @@ const email = document.querySelector("#email");
 const phone = document.querySelector('#phone');
 const password = document.querySelector("#password");
 const msg = document.querySelector("#msg");
+const msgSuccess = document.querySelector("#msgSuccess");
 const submit = document.querySelector("#submit");
 
 submit.addEventListener('click',async ()=>{
@@ -12,7 +13,7 @@ submit.addEventListener('click',async ()=>{
         const res = await axios.post("http://localhost:3000/user/signupUser",obj);
         
         if(res.data){
-            msg.textContent='Success';
+            msgSuccess.textContent='Success, Login here.';
         }else{
             msg.textContent='User already exist!';
         }
