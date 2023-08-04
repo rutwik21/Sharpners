@@ -1,8 +1,13 @@
 const chatConnection = require('../models/chat');
 
-exports.findAll= async()=>{
+exports.findAll= async(lastId)=>{
     try{
-        return await chatConnection.findAll();
+        if(lastId===0){
+            return await chatConnection.findAll();
+        }else{
+            return await chatConnection.findAll({limit:lastId-1});
+        }
+        
     }catch(err){
         console.log('error >>>>',err);
     }
