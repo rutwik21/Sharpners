@@ -6,9 +6,12 @@ const connection = require('./util/connection');
 
 const userRoute = require('./routes/users');
 const chatRoute = require('./routes/chat');
+const groupRoute = require('./routes/group')
 
 const user = require('./models/users');
 const chat = require('./models/chat');
+const group = require('./models/group');
+const joinedgroup = require("./models/joinedgroup");
  
 const app =express();
 
@@ -19,8 +22,17 @@ app.use(express.static('views'));
 
 app.use('/user',userRoute);
 app.use('/chat',chatRoute);
+app.use('/group',groupRoute);
 
+chat.belongsTo(user);
+chat.belongsTo(group);
 user.hasMany(chat);
+group.hasMany(chat);
+joinedgroup.belongsTo(group);
+joinedgroup.belongsTo(user);
+group.belongsToMany(user,{through : joinedgroup});
+user.belongsToMany(group,{through : joinedgroup});
+
 
 connection
   .sync()

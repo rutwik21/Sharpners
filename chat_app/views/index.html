@@ -14,32 +14,58 @@
             height: 400px;
             overflow: auto;
         }
+        .grpname{
+            font-size: 10px;
+            font-weight:500;
+            font-family:cursive;
+        }
     </style>
 </head>
 <body class="bg-primary-subtle">
-    <div class="container w-75">
-        <div class="row">
+    <div class="container">
+        <div class="row ">
             <div >
                 <img width="200px"  class="img-fluid rounded" src="chatApp.jpg" alt="logo" >
             </div>
+            <div class="col-2 ">
+                <div class="card-body bg-white p-1 rounded mt-2 " style="height: 445px;">
+                <div class="card-title text-center fw-bold" id="yourgrps">Your Groups</div></div>
 
-            <div class="card-body bg-white p-3 rounded-top mt-2" id="chat">
-                <div class="card border-0 bg-body-secondary p-2 w-75 mb-2">
-                    <small class="card-subtitle text-secondary">Rutwik</small>
-                    <div class="card-text">hello</div>
+            </div>
+            <div class="col-10">
+
+                <div class="card-body bg-white p-3 rounded-top mt-2" id="chat">
+                    <div class="text-center mt-5 text-secondary fw-bold" id="connecttext">
+                       Connect to a group!
+                    </div>
+                    
+                </div>
+
+                <div class="card border-0 bg-dark-subtle rounded-top-0">
+                    <div class="input-group m-1">
+                        <input type="text" class="form-control" id="msg" required>
+                        <button class="btn btn-primary" id="send">Send</button>
+                    </div>
+                    
+                </div>
+                <div class="text-center" id="createorid">
+                    <div class="text-center mt-2" >
+                    
+                        <div class="input-group">
+                            <input type='text' class="form-control border-2" id="enterid" placeholder="Enter Group Id">
+                            <button class="btn btn-success" id="enteridbtn">></button>
+                            <small class="btn disabled border-0">OR</small>
+                            <input type='text' class="form-control border-2 " id="creategroup" placeholder="Create new Group">
+                            <button class="btn btn-success" id="creategroupbtn">></button>
+                        
+                        </div>
+                        
+
+                    </div>
                 </div>
             </div>
-
-            <div class="card border-0 bg-dark-subtle rounded-top-0">
-                <div class="input-group m-1">
-                    <input type="text" class="form-control" id="msg" required>
-                    <button class="btn btn-primary" id="send">Send</button>
-                </div>
-                
-            </div>
-
         </div>
-            
+           
     </div>
 </body>
 </html>

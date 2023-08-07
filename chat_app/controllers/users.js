@@ -19,8 +19,6 @@ exports.signupUser =async (req,res,next)=>{
                 await UserServices.create(name,email,phone,hash);
                 res.json(1);
             });
-
-            
         }else{
             res.json(0);
         }
