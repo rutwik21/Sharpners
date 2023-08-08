@@ -6,7 +6,8 @@ const connection = require('./util/connection');
 
 const userRoute = require('./routes/users');
 const chatRoute = require('./routes/chat');
-const groupRoute = require('./routes/group')
+const groupRoute = require('./routes/group');
+const adminRoute = require('./routes/admin');
 
 const user = require('./models/users');
 const chat = require('./models/chat');
@@ -23,6 +24,7 @@ app.use(express.static('views'));
 app.use('/user',userRoute);
 app.use('/chat',chatRoute);
 app.use('/group',groupRoute);
+app.use('/admin',adminRoute);
 
 chat.belongsTo(user);
 chat.belongsTo(group);

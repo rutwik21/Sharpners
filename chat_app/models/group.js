@@ -1,6 +1,7 @@
 const sequelize = require("sequelize");
 
 const sq = require("../util/connection");
+const user = require("./users");
 
 
 const group = sq.define('group', {
@@ -15,7 +16,11 @@ const group = sq.define('group', {
       allowNull:false
     },
     createdBy:{
-      type:sequelize.STRING,
+      type:sequelize.INTEGER,
+      references: {
+            model: user,
+            key: 'id'
+          },
       allowNull:false
     }
   });

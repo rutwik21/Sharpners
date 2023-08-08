@@ -15,21 +15,28 @@ if(token){
     const creategroupbtn = document.querySelector('#creategroupbtn');
     const enteridbtn = document.querySelector('#enteridbtn');
     const yourgrps = document.querySelector('#yourgrps');
+    const grpmembers = document.querySelector('#grpmembers');
+    const addMembers = document.querySelector('#addMembers');
+    
+    const foradmin = document.getElementById('foradmin');
+    const parentnode = foradmin.parentNode;
+    parentnode.removeChild(foradmin)
+
+    
+
+
 
     let selectedgrpid=localStorage.getItem('selectedgrpid');
-    let grpin=[];
-
-    
-    
+    const grpin={};
 
     enteridbtn.addEventListener('click',async ()=>{
         if(enterid.value!=''){
 
             if(Number(enterid.value) in grpin){
-                alert('Already joined the group')
+                alert('Already joined the group');
             }else{
                 const res = await axios.get(`http://localhost:3000/group/getGroupById?groupId=${enterid.value}&userId=${token}`);
-                console.log(res);
+                location.reload();
             }
             
         }else{
@@ -50,42 +57,154 @@ if(token){
 
     async function getGroups(){
         const res = await axios.get(`http://localhost:3000/group/getGroup?userId=${token}`);
-        const joinedGroup=[];
+        
+
+        let joinedGroup=[];
         if(res.data.data){
             res.data.data.forEach(element=>{
-                joinedGroup.push(element.group);
+                element.data.admin = element.admin;
+                joinedGroup.push(element.data);
             });
-            // localStorage.setItem('group',JSON.stringify(arr));
+            localStorage.setItem('group',JSON.stringify(joinedGroup));
             
             joinedGroup.forEach(ele=>{
-            grpin.push(Number(ele.id));
+                const id =ele.id;
+                const admin = ele.admin;
+                grpin[id] = admin;
 
-            const newdiv = document.createElement('div');
-            const small = document.createElement('small');
+                const newdiv = document.createElement('div');
+                const small = document.createElement('small');
 
-                if(Number(ele.id)===Number(selectedgrpid)){
-                    chat.removeChild(connecttext);
-                    getChats(ele.id);
-                    newdiv.className='card btn text-white bg-success p-1 card-subtitle m-1';
-                }else{
-                    newdiv.className='card btn btn-outline-secondary p-1 card-subtitle m-1';
-                }
-                small.className='grpname';
+                    if(Number(ele.id)===Number(selectedgrpid)){
+                        chat.removeChild(connecttext);
+                        getChats(ele.id);
+                        newdiv.className='card btn text-white bg-success p-1 card-subtitle m-1';
+                    }else{
+                        newdiv.className='card btn btn-outline-secondary p-1 card-subtitle m-1';
+                    }
+                    small.className='grpname';
 
-                newdiv.addEventListener('click',()=>{
-                    localStorage.setItem('selectedgrpid',ele.id);
-                    location.reload();
-                })
+                    newdiv.addEventListener('click',()=>{
+                        localStorage.setItem('selectedgrpid',ele.id);
+                        location.reload();
+                    })
 
-                small.textContent=`id:${ele.id} ${ele.groupName}`;
+                    small.textContent=`id:${ele.id} ${ele.groupName}`;
 
-                newdiv.appendChild(small);
-                yourgrps.appendChild(newdiv);
+                    newdiv.appendChild(small);
+                    yourgrps.appendChild(newdiv);
 
 
             });
         }
-        
+
+    if(selectedgrpid){
+        if(grpin[selectedgrpid]===true){
+            parentnode.appendChild(foradmin);
+
+            const searchname = document.getElementById('searchname');
+            const searchbtn = document.getElementById('searchbtn');
+
+            searchbtn.addEventListener('click',async ()=>{
+                if(searchname.value!=''){
+                    const phone = searchname.value
+                    const obj={phone:phone,groupId:selectedgrpid}
+                    const res = await axios.post(`http://localhost:3000/admin/searchMember`,obj);
+                    if(res.data.data){
+                        const id = res.data.data.id;
+                        const newdiv = document.createElement('div');
+                        const namediv = document.createElement('div');
+                        const add = document.createElement('button');
+
+                        newdiv.className="btn-group-sm mb-1 text-center";
+                        namediv.className="btn disabled border-0 fw-bold";
+                        add.className="btn btn-sm btn-success";
+
+                        namediv.textContent=res.data.data.name;
+                        add.textContent='Add';
+
+                        add.addEventListener('click',async()=>{
+                            const obj = {userId:id,groupId:selectedgrpid}
+                            const result = await axios.post(`http://localhost:3000/admin/addMember`,obj);
+                            
+                            location.reload();
+                        });
+
+                        newdiv.appendChild(namediv);
+                        newdiv.appendChild(add);
+                        addMembers.appendChild(newdiv);
+
+
+                    }else{
+                        alert('Invalid or already joined the group');
+                    }
+                    // if(Number(enterid.value) in grpin){
+                    //     
+                    // }else{
+                        
+                    //     location.reload();
+                    // }
+                    
+                }else{
+                    alert('Please enter a number to search!')
+                }
+            });
+
+
+
+            const res = await axios.get(`http://localhost:3000/admin/getGroupMembers?groupId=${selectedgrpid}&userId=${token}`);
+            res.data.data.forEach(ele=>{
+                
+
+                const newdiv = document.createElement('div');
+                const namediv = document.createElement('div');
+                const makeadmin = document.createElement('button');
+                const remove = document.createElement('button');
+                
+                if(ele.admin===true){
+                    makeadmin.className = "btn btn-sm btn-success opacity-75 disabled";
+                    makeadmin.textContent='Admin';
+                    remove.textContent='Exit';
+                }else{
+                    makeadmin.className = "btn btn-sm btn-success";
+                    makeadmin.textContent='Make admin';
+                    remove.textContent='Remove';
+
+                    makeadmin.addEventListener('click',async()=>{
+                        const obj = {groupId:selectedgrpid,userId:ele.id};
+                        await axios.post(`http://localhost:3000/admin/makeAdmin`,obj);
+                        location.reload();
+                    });
+
+                    
+
+                }
+                remove.addEventListener('click',async()=>{
+                    const obj = {groupId:selectedgrpid,userId:ele.id};
+                    await axios.post(`http://localhost:3000/admin/removeMember`,obj);
+                    location.reload();
+                });
+
+
+                newdiv.className = "btn-group-sm mb-1 text-center";
+                namediv.className = "btn disabled border-0 fw-bold";
+                
+                remove.className = "btn btn-sm btn-danger";
+
+                namediv.textContent=ele.name;
+                
+                
+
+                newdiv.appendChild(namediv);
+                newdiv.appendChild(makeadmin);
+                newdiv.appendChild(remove);
+                grpmembers.appendChild(newdiv);
+
+            });
+        }
+    }
+
+    
 
     }
     getGroups();
@@ -135,7 +254,6 @@ if(token){
         });
         
         
-
         // lschats.forEach(element=>{
         //     const newdiv = document.createElement('div');
         //     const small = document.createElement('small');
@@ -159,8 +277,6 @@ if(token){
         //     chat.scrollTop = chat.scrollHeight;
         // })
 
-        
-    
 }
 
 
@@ -217,7 +333,6 @@ send.addEventListener('click',async ()=>{
     
     });
 
-    
 
 }else{
     location.replace('login.html');
