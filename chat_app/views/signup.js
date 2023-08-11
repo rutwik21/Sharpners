@@ -10,7 +10,7 @@ submit.addEventListener('click',async ()=>{
     event.preventDefault();
     const obj = {'name':name.value,'email':email.value,'phone':phone.value,'password':password.value};
     try{
-        const res = await axios.post("http://localhost:3000/user/signupUser",obj);
+        const res = await axios.post("https://34.207.207.120:4000/user/signupUser",obj);
         
         if(res.data){
             msgSuccess.textContent='Success, Login here.';

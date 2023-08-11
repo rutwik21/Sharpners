@@ -1,3 +1,4 @@
+
 const email = document.querySelector("#email");
 const password = document.querySelector("#password");
 const msg = document.querySelector("#msg");
@@ -8,7 +9,7 @@ submit.addEventListener('click',async ()=>{
     event.preventDefault();
     const obj = {'email':email.value,'password':password.value};
     try{
-        const res = await axios.post("http://localhost:3000/user/loginUser",obj);
+        const res = await axios.post("https://34.207.207.120:4000/user/loginUser",obj);
         localStorage.setItem('token',res.data.userId ) ;
         localStorage.setItem('name',res.data.name ) ;
         location.replace('index.html');
